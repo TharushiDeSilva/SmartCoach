@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ExampleApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Main Food Spinner-->
+    <string-array name="main_staple_values">
+        <item>Beet-root</item>
+        <item>Bread</item>
+        <item>Cabbage</item>
+        <item>Carrot</item>
+        <item>Corn</item>
+        <item>EggPlant</item>
+        <item>Green-Beans</item>
+        <item>Kidney-Beans</item>
+        <item>Noodles</item>
+        <item>Peas</item>
+        <item>Potato</item>
+        <item>Rice</item>
+        <item>Spinach</item>
+        <item>Turnip</item>
+    </string-array>
+</resources>
