@@ -1,8 +1,10 @@
 package com.example.tharushidesilva.smartcoach;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,8 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +41,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragments;
+    int curr_step_cnt = 0;
+    int rec_step_cnt = 0;
+    String userName = "";
+    double curr_calorie_cnt = 0;
+    double rec_calorie_cnt = 0;
+    private PendingIntent pendingIntent;
+    private AlarmManager manager;
+
+    public void notifyChange(){
+        if(curr_calorie_cnt > rec_calorie_cnt){
+            EmailSender emailSender = new EmailSender();
+            emailSender.sendMail("tharushid.14@cse.mrt.ac.lk",
+                    "Calorie count exceeded!","User "+userName+ "has exceeded the recommended calorie count! "+"Current calorie count:"
+                    +curr_calorie_cnt,this);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,24 +73,33 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         //Adding the Fragments to the Array
         fragments = new ArrayList<>();
         StepCountFragment fragmentStepCounter = StepCountFragment.newInstance();
         fragments.add(fragmentStepCounter);
         ActivityFragment fragmentActivity = ActivityFragment.newInstance();
         fragments.add(fragmentActivity);
-        FoodIntakeFragment fragmentFoodIntake = FoodIntakeFragment.newInstance();
+        FoodIntakeFragment fragmentFoodIntake = FoodIntakeFragment.newInstance(this);
         fragments.add(fragmentFoodIntake);
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+        firebaseHandler.updateMainActivity("user001",this);
 
+        Intent alarmIntent = new Intent(this, Alarm.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        startAlarm();
+
+    }
+
+    public void startAlarm() {
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        Date now = Calendar.getInstance().getTime();
+        Date tonight = new Date(now.getYear(),now.getMonth(),now.getDate(),23,59,59);
+        long interval = tonight.getTime() - now.getTime();
+        interval = 1000;
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+interval, interval, pendingIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -122,8 +153,14 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView stepCntTxt = (TextView) rootView.findViewById(R.id.step_count);
+            TextView calorieCntTxt = (TextView) rootView.findViewById(R.id.calorie_count);
+            FirebaseHandler firebaseHandler = new FirebaseHandler();
+            //stepCntTxt.setText("TXTTXT");
+            firebaseHandler.readValue("user001","step_cnt",stepCntTxt);
+            firebaseHandler.readValue("user001","calorie_cnt",calorieCntTxt);
+
+
             return rootView;
         }
     }
@@ -151,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
             }
             else if(position==3){
                 f = fragments.get(2);
+            }
+            else if(position==4){
+                f = fragments.get(3);
             }
             return f;
         }

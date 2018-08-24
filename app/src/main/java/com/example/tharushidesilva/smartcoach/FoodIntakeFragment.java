@@ -78,7 +78,7 @@ public class FoodIntakeFragment extends Fragment implements AdapterView.OnItemSe
 
 
     // TODO: Rename and change types and number of parameters
-    public static FoodIntakeFragment newInstance() {
+    public static FoodIntakeFragment newInstance(MainActivity mainActivity) {
         FoodIntakeFragment fragment = new FoodIntakeFragment();
         return fragment;
     }
@@ -105,7 +105,8 @@ public class FoodIntakeFragment extends Fragment implements AdapterView.OnItemSe
         caloryValue = (TextView) v.findViewById(R.id.caloriesValue);
         Spinner spinner = (Spinner) v.findViewById(R.id.spinnerFoodItems);
         spinner.setOnItemSelectedListener(this);
-
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+        firebaseHandler.readValue("user001","calorie_cnt",caloryValue);
         //Adding Manual Values of the calories intake
         final EditText manualInputCalories = (EditText) v.findViewById(R.id.CaloriesPerItem); //---------------manual input
         Button button = (Button) v.findViewById(R.id.submitButton);
@@ -118,6 +119,8 @@ public class FoodIntakeFragment extends Fragment implements AdapterView.OnItemSe
                 totalCalories += effectiveCalories*temp1;
                 //view.setText(manualInputCalories.getText());
                 view.setText((totalCalories).toString());
+                FirebaseHandler firebaseHandler = new FirebaseHandler();
+                firebaseHandler.writeValue("user001","calorie_cnt",Double.toString(totalCalories));
             }
         });
 

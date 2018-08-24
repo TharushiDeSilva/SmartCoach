@@ -17,8 +17,9 @@ public class CustomValueEventListener implements ValueEventListener{
     }
 
     @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        textView.setText(Objects.requireNonNull(dataSnapshot.getValue()).toString());
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        if(dataSnapshot.getValue() == null){return;}
+        textView.setText((dataSnapshot.getValue()).toString());
     }
 
     @Override

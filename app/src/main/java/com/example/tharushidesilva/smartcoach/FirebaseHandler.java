@@ -12,9 +12,17 @@ public class FirebaseHandler {
         myRef.child(userID).child(field).addValueEventListener(new CustomValueEventListener(view));
     }
 
+    public void updateMainActivity(String userID,MainActivity mainActivity){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("User");
+        myRef.child(userID).addValueEventListener(new MainActivityEventListener(mainActivity));
+    }
+
     public void writeValue(String userID,String field,String value){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("User");
         myRef.child(userID).child(field).setValue(value);
     }
+
+
 }

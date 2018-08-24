@@ -62,15 +62,15 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
 
         // Read a value from firebase
         FirebaseHandler firebaseHandler = new FirebaseHandler();
-        firebaseHandler.readValue("user001","step_cnt",recommendedStepCountValue);
+        firebaseHandler.readValue("user001","min_step_cnt",recommendedStepCountValue);
 
         //Write a value to firebase
         //firebaseHandler.writeValue("user001","step_cnt","AASDD");
 
         //Send Email
-        EmailSender emailSender = new EmailSender();
-        emailSender.sendMail("tharushid.14@cse.mrt.ac.lk",
-                "Subject Txt","Body Text",this.getContext());
+        //  EmailSender emailSender = new EmailSender();
+        //emailSender.sendMail("tharushid.14@cse.mrt.ac.lk",
+        //        "Subject Txt","Body Text",this.getContext());
         return v;
     }
 
@@ -129,6 +129,8 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
         Sensor mySensor = event.sensor;
         if(mySensor.getType() == Sensor.TYPE_STEP_COUNTER){
             stepCountValue.setText(String.valueOf((int) event.values[0]));
+            FirebaseHandler firebaseHandler = new FirebaseHandler();
+            firebaseHandler.writeValue("user001","step_cnt",Float.toString(event.values[0]));
 
         }
     }
