@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Date now = Calendar.getInstance().getTime();
         Date tonight = new Date(now.getYear(),now.getMonth(),now.getDate(),23,59,59);
         long interval = tonight.getTime() - now.getTime();
-        interval = 1000;
+        //interval = 1000;
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+interval, interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();

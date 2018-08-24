@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:text="X Direction: "
                 android:layout_marginLeft="20dp"
-                android:textSize="30dp"/>
+                android:textSize="25dp"/>
             <TextView
                 android:id="@+id/valueX"
                 android:layout_width="200dp"
@@ -50,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:text="Y Direction: "
                 android:layout_marginLeft="20dp"
-                android:textSize="30dp"/>
+                android:textSize="25dp"/>
             <TextView
                 android:id="@+id/valueY"
                 android:layout_width="200dp"
@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:text="Z Direction: "
                 android:layout_marginLeft="20dp"
-                android:textSize="30dp"/>
+                android:textSize="25dp"/>
             <TextView
                 android:id="@+id/valueZ"
                 android:layout_width="200dp"
