@@ -47,7 +47,18 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
         stepCountValue = (TextView) v.findViewById(R.id.step_count_value);
         recommendedStepCountValue = (TextView) v.findViewById(R.id.recommended_step_count_value);
         stepCountValue.setText("0");
-        recommendedStepCountValue.setText("10000");
+
+        // Read a value from firebase
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+        firebaseHandler.readValue("user001","step_cnt",recommendedStepCountValue);
+
+        //Write a value to firebase
+        //firebaseHandler.writeValue("user001","step_cnt","AASDD");
+
+        //Send Email
+        EmailSender emailSender = new EmailSender();
+        emailSender.sendMail("tharushid.14@cse.mrt.ac.lk",
+                "Subject Txt","Body Text",this.getContext());
         return v;
     }
 

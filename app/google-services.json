@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "601087292294",
+    "firebase_url": "https://smartcoach-f4451.firebaseio.com",
+    "project_id": "smartcoach-f4451",
+    "storage_bucket": "smartcoach-f4451.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601087292294:android:7003f3876b2c383c",
+        "android_client_info": {
+          "package_name": "com.example.tharushidesilva.smartcoach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601087292294-u31c0123ei7b37ab696e5rmd7sbkqj9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKIFMzYOPsRQ1qXVwMl_3kJrc9elkNYRQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
