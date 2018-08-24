@@ -99,8 +99,10 @@ public class ActivityFragment extends Fragment implements SensorEventListener{
             //deciding if the user is asleep/ or idle.
             if((absRoundX <0.5) && (absRoundY<0.5) && (absRoundZ<0.5)){
                 activityValue.setText("Idle");
-            }else{
+            }else if((absRoundX <1.8) && (absRoundY<1.8) && (absRoundZ<1.8)){
                 activityValue.setText("Active");
+            }else{
+                activityValue.setText("Running");
             }
         }
     }
