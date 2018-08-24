@@ -66,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(fragmentStepCounter);
         ActivityFragment fragmentActivity = ActivityFragment.newInstance();
         fragments.add(fragmentActivity);
+        FoodIntakeFragment fragmentFoodIntake = FoodIntakeFragment.newInstance();
+        fragments.add(fragmentFoodIntake);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,14 +149,16 @@ public class MainActivity extends AppCompatActivity {
             else if(position==2){
                 f = fragments.get(1);
             }
-
+            else if(position==3){
+                f = fragments.get(2);
+            }
             return f;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 }

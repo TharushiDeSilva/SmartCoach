@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StepCountFragment extends Fragment implements SensorEventListener{
 
     private OnFragmentInteractionListener mListener;
@@ -21,6 +24,8 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
     private Sensor stepCounter;
     private boolean walking = false;
     private TextView stepCountValue, recommendedStepCountValue;
+    private static String date, time;
+    private Bundle savedInstanceState;
     public StepCountFragment() {
         // Required empty public constructor
     }
@@ -34,8 +39,15 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
         sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
-        //
+        walking = true;
+        stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(stepCounter != null){
+            sensorManager.registerListener(this, stepCounter, sensorManager.SENSOR_DELAY_UI);
+        }else {
+            Toast.makeText(this.getActivity(), "Sensor not Found!", Toast.LENGTH_SHORT).show(); //=========== not sure
+        }
     }
 
     @Override
@@ -69,7 +81,7 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
         }
     }
 
-    @Override
+    /*@Override
     public void onResume(){
         super.onResume();
         walking = true;
@@ -79,13 +91,13 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
         }else {
             Toast.makeText(this.getActivity(), "Sensor not Found!", Toast.LENGTH_SHORT).show(); //=========== not sure
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onPause(){
         super.onPause();
         walking = false;
-    }
+    }*/
 
     @Override
     public void onDetach() {
@@ -95,9 +107,18 @@ public class StepCountFragment extends Fragment implements SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        date = timeStamp.substring(0,10);
+        time = timeStamp.substring(11);
+
+        if(time =="00.00.00"){
+            sensorManager.unregisterListener(this);
+            onCreate(savedInstanceState);
+        }
         Sensor mySensor = event.sensor;
         if(mySensor.getType() == Sensor.TYPE_STEP_COUNTER){
-            stepCountValue.setText(String.valueOf(event.values[0]));
+            stepCountValue.setText(String.valueOf((int) event.values[0]));
+
         }
     }
 
