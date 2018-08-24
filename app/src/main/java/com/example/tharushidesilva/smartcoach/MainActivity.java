@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private View mainView;
     private ArrayList<Fragment> fragments;
     int curr_step_cnt = 0;
     int rec_step_cnt = 0;
@@ -49,11 +51,23 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager manager;
 
     public void notifyChange(){
+        ImageView calCountView = (ImageView) fragments.get(0).getActivity().findViewById(R.id.icon_calories);
+        ImageView stepCountView = (ImageView) fragments.get(0).getActivity().findViewById(R.id.icon_steps);
         if(curr_calorie_cnt > rec_calorie_cnt){
             EmailSender emailSender = new EmailSender();
             emailSender.sendMail("tharushid.14@cse.mrt.ac.lk",
                     "Calorie count exceeded!","User "+userName+ "has exceeded the recommended calorie count! "+"Current calorie count:"
                     +curr_calorie_cnt,this);
+            PlaceholderFragment placeholderFragment = (PlaceholderFragment) fragments.get(4);
+
+            calCountView.setImageResource(R.drawable.negative_icon);
+        }else{
+            calCountView.setImageResource(R.drawable.positive_icon);
+        }
+        if(curr_step_cnt < rec_step_cnt){
+            stepCountView.setImageResource(R.drawable.negative_icon);
+        }else{
+            stepCountView.setImageResource(R.drawable.positive_icon);
         }
     }
 
@@ -74,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Adding the Fragments to the Array
         fragments = new ArrayList<>();
+        PlaceholderFragment placeholderFragment = PlaceholderFragment.newInstance(0);
+        fragments.add(placeholderFragment);
+
         StepCountFragment fragmentStepCounter = StepCountFragment.newInstance();
         fragments.add(fragmentStepCounter);
         ActivityFragment fragmentActivity = ActivityFragment.newInstance();
@@ -97,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         long interval = tonight.getTime() - now.getTime();
         //interval = 1000;
 
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+interval, interval, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+interval, 60000, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 
@@ -178,20 +195,30 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            Fragment f = PlaceholderFragment.newInstance(position + 1);
-            if(position==1){
-                f = fragments.get(0);
-            }
-            else if(position==2){
-                f = fragments.get(1);
-            }
-            else if(position==3){
-                f = fragments.get(2);
-            }
-            else if(position==4){
-                f = fragments.get(3);
-            }
-            return f;
+//            Fragment f = PlaceholderFragment.newInstance(position + 1);
+//            if(position==0){
+//                if(fragments.size()<4){
+//                    f = PlaceholderFragment.newInstance(position + 1);
+//                    fragments.add(4,f);
+//                }else {
+//                    f= fragments.get(4);
+//                }
+//
+//
+//            }
+//            if(position==1){
+//                f = fragments.get(0);
+//            }
+//            else if(position==2){
+//                f = fragments.get(1);
+//            }
+//            else if(position==3){
+//                f = fragments.get(2);
+//            }
+//            else if(position==4){
+//                f = fragments.get(3);
+//            }
+            return fragments.get(position);
         }
 
         @Override
